@@ -1,10 +1,11 @@
 FROM nvidia/cuda:11.4.3-cudnn8-devel-ubuntu18.04
 
-# Remove any third-party apt sources to avoid issues with expiring keys.
+# 이상한거 안깔거임
 RUN rm -f /etc/apt/sources.list.d/*.list
 
-# Install some basic utilities & python prerequisites
+#이거 안하면 터미널이 자꾸 말걸어서 피곤함
 ARG DEBIAN_FRONTEND=noninteractive
+# 필요한거
 RUN apt-get update -y && apt-get install -y --no-install-recommends\
     vim \
     curl \
@@ -35,11 +36,11 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends\
     python3-openssl && \
     rm -rf /var/lib/apt/lists/*
 
-# Set up time zone
+# 시간설정
 ENV TZ=Asia/Seoul
 RUN sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 
-# Add config for ssh connection
+# ssh 가끔은.. 필요하지 않을까..
 RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
     echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config
 
