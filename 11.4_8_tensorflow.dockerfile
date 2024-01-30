@@ -1,4 +1,9 @@
-FROM nvidia/cuda:11.4.3-cudnn8-devel-ubuntu18.04
+ARG UBUNTU_VERSION=18.04
+ARG CUDA_VERSION=11.4.3
+ARG CUDA=11.4
+ARG CUDNN_VERSION=8
+
+FROM nvidia/cuda:${CUDA_VERSION}-cudnn${CUDNN_VERSION}-devel-ubuntu${UBUNTU_VERSION}
 LABEL maintainer "http://ysh8614.github.io"
 
 ARG CUDA_VERSION
@@ -49,8 +54,6 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends\
 ENV TZ=Asia/Seoul
 RUN sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 
-# ssh 가끔은.. 필요하지 않을까..
-
 # For CUDA profiling
 ENV LD_LIBRARY_PATH /usr/local/cuda-${CUDA}/targets/x86_64-linux/lib:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 && \
@@ -69,7 +72,7 @@ RUN adduser $USER_NAME -u $UID --quiet --gecos "" --disabled-password && \
     echo "$USER_NAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USER_NAME && \
     chmod 0440 /etc/sudoers.d/$USER_NAME
 
-# ssh 가끔은.. 필요하지 않을까..
+# ssh 가끔은.. 필요하지 않을까.. 22포트호스팅 꼭 해줍시다 
 RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
     echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config && \
     echo "UsePAM no" >> /etc/ssh/sshd_config
@@ -77,12 +80,12 @@ RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
 USER $USER_NAME
 SHELL ["/bin/bash", "-c"]
 
-# Create the conda environment
+# conda 세팅
 RUN conda create -n $CONDA_ENV_NAME python=$PYTHON_VERSION
 ENV PATH /usr/local/envs/$CONDA_ENV_NAME/bin:$PATH
 RUN echo "source activate ${CONDA_ENV_NAME}" >> ~/.bashrc
 
-# Enable jupyter lab
+# 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
 RUN source activate ${CONDA_ENV_NAME} && \
     conda install -c conda-forge jupyterlab && \
     jupyter serverextension enable --py jupyterlab --sys-prefix
