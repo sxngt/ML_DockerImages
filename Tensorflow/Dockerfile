@@ -81,8 +81,8 @@ ARG PYTHON_VERSION=3.8
 
 RUN conda create -n tf python=${PYTHON_VERSION}
 
+RUN echo "source activate tf" > ~/.bashrc
 ENV PATH /opt/conda/envs/tf/bin:$PATH
-RUN /bin/bash -c "source activate tf"
 
 RUN conda activate tf
 
