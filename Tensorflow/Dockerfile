@@ -63,27 +63,30 @@ RUN apt-get update --fix-missing && \
 # Install miniconda
 # - python에서 ML/DL을 사용할 것이기 때문에 여러모로 편리한 miniconda를 설치합니다.
 # - 환경변수도 함께 지정해줍니다.
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-ENV PATH /opt/conda/bin:$PATH
-RUN apt-get -qq update && apt-get -qq -y install wget curl bzip2 ca-certificates git sudo vim build-essential \
-    && curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
-    && bash /tmp/miniconda.sh -bfp /usr/local \
-    && rm -rf /tmp/miniconda.sh \
-    && conda install -y python=3 \
-    && conda update conda \
-#    && apt-get -qq -y remove curl bzip2 \
-    && apt-get -qq -y autoremove \
-    && apt-get autoclean \
-    && rm -rf /var/lib/apt/lists/* /var/log/dpkg.log \
-    && conda clean --all --yes
+ARG CONDA_DIR=/opt/conda
+ENV CUDA_PATH=/usr/local/cuda
 
-ARG PYTHON_VERSION=3.9
+# add to path
+ENV PATH $CONDA_DIR/bin:$PATH
 
-RUN conda init bash \
-    && . ~/.bashrc \
-    && conda create --name tf python=${PYTHON_VERSION} \
-    && conda activate tf
+# Install miniconda
+RUN echo "export PATH=$CONDA_DIR/bin:"'$PATH' > /etc/profile.d/conda.sh && \
+    curl -sL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p $CONDA_DIR && \
+    rm ~/miniconda.sh
+
+# Conda 가상환경 생성
+RUN conda config --set always_yes yes --set changeps1 no && \
+    conda create -y -q -n py39 python=3.9
+
+ENV PATH /opt/conda/envs/py39/bin:$PATH
+ENV CONDA_DEFAULT_ENV py39
+ENV CONDA_PREFIX /opt/conda/envs/py39
+ENV PATH=/usr/local/bin:${PATH}
+
+ENV LANG ko_KR.UTF-8
+RUN apt-get update
 
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
-RUN pip install tensorflow-gpu
+RUN pip install tensorflow-gpu==2.6.0
 
