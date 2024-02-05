@@ -57,7 +57,7 @@ ENV PATH /opt/conda/bin:$PATH
 # Install Dependencies of Miniconda
 RUN apt-get update --fix-missing && \
     apt-get install -y wget bzip2 curl git && \
-    apt-get clean && 
+    apt-get clean
 
 # Install miniconda3
 # Install miniconda
