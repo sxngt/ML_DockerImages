@@ -57,8 +57,8 @@ ENV PATH /opt/conda/bin:$PATH
 # Install Dependencies of Miniconda
 RUN apt-get update --fix-missing && \
     apt-get install -y wget bzip2 curl git && \
-    apt-get clean && \
-    
+    apt-get clean && 
+
 # Install miniconda3
 # Install miniconda
 # - python에서 ML/DL을 사용할 것이기 때문에 여러모로 편리한 miniconda를 설치합니다.
