@@ -77,7 +77,7 @@ RUN apt-get -qq update && apt-get -qq -y install wget curl bzip2 ca-certificates
     && rm -rf /var/lib/apt/lists/* /var/log/dpkg.log \
     && conda clean --all --yes
 
-ARG PYTHON_VERSION=3.7
+ARG PYTHON_VERSION=3.9
 
 RUN conda init bash \
     && . ~/.bashrc \
@@ -88,5 +88,5 @@ RUN conda init bash \
 RUN python -m pip install --upgrade pip && \
     pip install jupyter && \
     pip install jupyterlab \
-    pip install tensorflow-gpu==2.6.0
+    pip install tensorflow-gpu==2.11.0
 
