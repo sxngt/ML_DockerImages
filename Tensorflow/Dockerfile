@@ -4,6 +4,7 @@ ARG CUDA=11.4
 ARG CUDNN_VERSION=8
 
 FROM nvidia/cuda:${CUDA_VERSION}-cudnn${CUDNN_VERSION}-devel-ubuntu${UBUNTU_VERSION}
+FROM continuumio/miniconda3:latest
 LABEL maintainer "http://ysh8614.github.io"
 
 # 이상한거 안깔거임
@@ -60,20 +61,12 @@ RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
     echo "UsePAM no" >> /etc/ssh/sshd_config
 
 ARG PYTHON_VERSION=3.8
-ARG CONDA_ENV_NAME=tf_env
 ARG TF_VERSION=2.4.0
 
-# conda 세팅
-RUN conda create -n $CONDA_ENV_NAME python=$PYTHON_VERSION
-ENV PATH /usr/local/envs/$CONDA_ENV_NAME/bin:$PATH
-RUN echo "source activate ${CONDA_ENV_NAME}" >> ~/.bashrc
-
-RUN conda init
-RUN source ~/.bashrc 
+RUN conda install python==${PYTHON_VERSION}
 
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
-RUN conda activate ${CONDA_ENV_NAME} && \
-    RUN python -m pip install --upgrade pip && \
+RUN python -m pip install --upgrade pip && \
     pip install jupyter && \
     pip install jupyterlab
 
@@ -86,5 +79,4 @@ RUN echo "c.NotebookApp.password_required = True" >> /root/.jupyter/jupyter_note
 RUN echo "c.NotebookApp.use_redirect_file = False" >> /root/.jupyter/jupyter_notebook_config.py
 
 # Install the packages
-RUN conda activate ${CONDA_ENV_NAME} && \
-    python -m pip install --no-cache-dir tensorflow-gpu==${TF_VERSION}
+RUN python -m pip install --no-cache-dir tensorflow-gpu==${TF_VERSION}
