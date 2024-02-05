@@ -85,5 +85,5 @@ RUN conda init bash \
     && conda activate tf
 
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
-RUN pip install tensorflow-gpu==2.4.0
+RUN pip install tensorflow-gpu
 
