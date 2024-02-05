@@ -8,7 +8,6 @@ FROM nvidia/cuda:${CUDA_VERSION}-cudnn${CUDNN_VERSION}-devel-ubuntu${UBUNTU_VERS
 LABEL maintainer "http://ysh8614.github.io"
 
 # 이상한거 안깔거임
-RUN rm -f /etc/apt/sources.list.d/*.list
 
 #이거 안하면 터미널이 자꾸 말걸어서 피곤함
 ARG DEBIAN_FRONTEND=noninteractive
