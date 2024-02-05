@@ -64,11 +64,5 @@ RUN python -m pip install --upgrade pip && \
 
 RUN jupyter notebook --generate-config
 
-RUN echo "c.NotebookApp.ip = '0.0.0.0'" >> /root/.jupyter/jupyter_notebook_config.py
-RUN echo "c.NotebookApp.allow_root = True" >> /root/.jupyter/jupyter_notebook_config.py
-RUN echo "c.NotebookApp.open_browser = False" >> /root/.jupyter/jupyter_notebook_config.py
-RUN echo "c.NotebookApp.password_required = True" >> /root/.jupyter/jupyter_notebook_config.py
-RUN echo "c.NotebookApp.use_redirect_file = False" >> /root/.jupyter/jupyter_notebook_config.py
-
 # Install the packages
 RUN python -m pip install --no-cache-dir tensorflow-gpu==${TF_VERSION}
