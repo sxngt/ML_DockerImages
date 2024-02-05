@@ -88,5 +88,5 @@ RUN conda init bash \
 RUN python -m pip install --upgrade pip && \
     pip install jupyter && \
     pip install jupyterlab \
-    pip install tensorflow-gpu==2.11.0
+    pip install tensorflow-gpu
 
