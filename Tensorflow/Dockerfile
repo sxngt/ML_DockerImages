@@ -80,6 +80,10 @@ RUN apt-get -qq update && apt-get -qq -y install wget curl bzip2 ca-certificates
 ARG PYTHON_VERSION=3.8
 
 RUN conda create -n tf python=${PYTHON_VERSION}
+
+ENV PATH /opt/conda/envs/tf/bin:$PATH
+RUN /bin/bash -c "source activate tf"
+
 RUN conda activate tf
 
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
