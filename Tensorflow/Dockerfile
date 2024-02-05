@@ -69,7 +69,7 @@ ENV PATH /usr/local/envs/$CONDA_ENV_NAME/bin:$PATH
 RUN echo "source activate ${CONDA_ENV_NAME}" >> ~/.bashrc
 
 RUN conda init
-RUN source .bashrc 
+RUN source ~/.bashrc 
 
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
 RUN conda activate ${CONDA_ENV_NAME} && \
