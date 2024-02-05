@@ -83,5 +83,5 @@ ARG PYTHON_VERSION=3.8
 RUN python -m pip install --upgrade pip && \
     pip install jupyter && \
     pip install jupyterlab \
-    prp install tensorflow-gpu==2.4.0
+    pip install tensorflow-gpu==2.4.0
 
