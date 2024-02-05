@@ -4,7 +4,7 @@ ARG CUDA=11.4
 ARG CUDNN_VERSION=8
 
 FROM nvidia/cuda:${CUDA_VERSION}-cudnn${CUDNN_VERSION}-devel-ubuntu${UBUNTU_VERSION}
-FROM continuumio/miniconda3:latest
+
 LABEL maintainer "http://ysh8614.github.io"
 
 # 이상한거 안깔거임
@@ -52,17 +52,34 @@ RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
     echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config && \
     echo "UsePAM no" >> /etc/ssh/sshd_config
 
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV PATH /opt/conda/bin:$PATH
+
+# Install Dependencies of Miniconda
+RUN apt-get update --fix-missing && \
+    apt-get install -y wget bzip2 curl git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install miniconda3
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
+    rm ~/miniconda.sh && \
+    /opt/conda/bin/conda clean -tipsy && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo "conda activate my_env" >> ~/.bashrc
+
 ARG PYTHON_VERSION=3.8
 ARG TF_VERSION=2.4.0
 
-RUN conda install python==${PYTHON_VERSION}
+RUN conda create -n tf python=${PYTHON_VERSION}
+RUN conda activate tf
 
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
 RUN python -m pip install --upgrade pip && \
     pip install jupyter && \
     pip install jupyterlab
-
-RUN jupyter notebook --generate-config
 
 # Install the packages
 RUN python -m pip install --no-cache-dir tensorflow-gpu==${TF_VERSION}
