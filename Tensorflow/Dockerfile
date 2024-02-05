@@ -77,7 +77,7 @@ RUN apt-get -qq update && apt-get -qq -y install wget curl bzip2 ca-certificates
     && rm -rf /var/lib/apt/lists/* /var/log/dpkg.log \
     && conda clean --all --yes
 
-ARG PYTHON_VERSION=3.8
+ARG PYTHON_VERSION=3.9
 
 RUN conda init bash \
     && . ~/.bashrc \
