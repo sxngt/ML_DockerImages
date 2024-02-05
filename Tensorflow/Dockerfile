@@ -58,40 +58,30 @@ ENV PATH /opt/conda/bin:$PATH
 RUN apt-get update --fix-missing && \
     apt-get install -y wget bzip2 curl git && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
+    
 # Install miniconda3
 # Install miniconda
 # - python에서 ML/DL을 사용할 것이기 때문에 여러모로 편리한 miniconda를 설치합니다.
 # - 환경변수도 함께 지정해줍니다.
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH /opt/conda/bin:$PATH
-RUN apt-get install -y wget bzip2 ca-certificates \
-    libglib2.0-0 libxext6 libsm6 libxrender1 \
-    git mercurial subversion
-RUN wget --quiet https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
-    rm ~/miniconda.sh && \
-    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo "conda activate base" >> ~/.bashrc
-RUN apt-get install -y curl grep sed dpkg && \
-    TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
-    curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
-    dpkg -i tini.deb && \
-    rm tini.deb && \
-    apt-get clean
+RUN apt-get -qq update && apt-get -qq -y install wget curl bzip2 ca-certificates git sudo vim build-essential \
+    && curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
+    && bash /tmp/miniconda.sh -bfp /usr/local \
+    && rm -rf /tmp/miniconda.sh \
+    && conda install -y python=3 \
+    && conda update conda \
+#    && apt-get -qq -y remove curl bzip2 \
+    && apt-get -qq -y autoremove \
+    && apt-get autoclean \
+    && rm -rf /var/lib/apt/lists/* /var/log/dpkg.log \
+    && conda clean --all --yes
 
 ARG PYTHON_VERSION=3.8
-ARG TF_VERSION=2.4.0
-
-RUN conda create -n tf python=${PYTHON_VERSION}
-RUN conda activate tf
 
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
 RUN python -m pip install --upgrade pip && \
     pip install jupyter && \
-    pip install jupyterlab
+    pip install jupyterlab \
+    prp install tensorflow-gpu==2.4.0
 
-# Install the packages
-RUN python -m pip install --no-cache-dir tensorflow-gpu==${TF_VERSION}
