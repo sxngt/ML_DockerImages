@@ -83,10 +83,10 @@ RUN conda init bash \
     && . ~/.bashrc \
     && conda create --name tf python=${PYTHON_VERSION} \
     && conda activate tf
-    
+
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
 RUN python -m pip install --upgrade pip && \
     pip install jupyter && \
     pip install jupyterlab \
-    pip install tensorflow-gpu==2.4.0
+    pip install tensorflow-gpu==2.6.0
 
