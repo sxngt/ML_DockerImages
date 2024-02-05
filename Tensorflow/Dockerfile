@@ -70,8 +70,17 @@ RUN echo "source activate ${CONDA_ENV_NAME}" >> ~/.bashrc
 
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
 RUN source activate ${CONDA_ENV_NAME} && \
-    conda install -c conda-forge jupyterlab && \
-    jupyter serverextension enable --py jupyterlab --sys-prefix
+    RUN python -m pip install --upgrade pip && \
+    pip install jupyter && \
+    pip install jupyterlab
+
+RUN jupyter notebook --generate-config
+
+RUN echo "c.NotebookApp.ip = '0.0.0.0'" >> /root/.jupyter/jupyter_notebook_config.py
+RUN echo "c.NotebookApp.allow_root = True" >> /root/.jupyter/jupyter_notebook_config.py
+RUN echo "c.NotebookApp.open_browser = False" >> /root/.jupyter/jupyter_notebook_config.py
+RUN echo "c.NotebookApp.password_required = True" >> /root/.jupyter/jupyter_notebook_config.py
+RUN echo "c.NotebookApp.use_redirect_file = False" >> /root/.jupyter/jupyter_notebook_config.py
 
 # Install the packages
 RUN source activate ${CONDA_ENV_NAME} && \
