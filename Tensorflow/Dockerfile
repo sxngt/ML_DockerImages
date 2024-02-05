@@ -47,14 +47,6 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends\
 ENV TZ=Asia/Seoul
 RUN sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 
-
-ENV LANG C.UTF-8
-RUN curl -o /tmp/miniconda.sh -sSL http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    chmod +x /tmp/miniconda.sh && \
-    bash /tmp/miniconda.sh -bfp /usr/local && \
-    rm /tmp/miniconda.sh
-RUN conda update -y conda
-
 # ssh 가끔은.. 필요하지 않을까.. 22포트호스팅 꼭 해줍시다 
 RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
     echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config && \
