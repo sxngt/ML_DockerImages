@@ -86,6 +86,8 @@ ENV PATH=/usr/local/bin:${PATH}
 ENV LANG ko_KR.UTF-8
 RUN apt-get update
 
+RUN pip install --upgrade pip
+
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
 RUN pip install tensorflow-gpu==2.15.0 && \
     pip install jupyter && \
