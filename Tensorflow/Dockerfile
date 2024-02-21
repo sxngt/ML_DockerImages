@@ -88,8 +88,8 @@ RUN apt-get update
 
 RUN pip install --upgrade pip
 
+RUN conda install -c anaconda tensorflow-gpu==2.15.0
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
-RUN pip install tensorflow-gpu==2.15.0 && \
-    pip install jupyter && \
+RUN pip install jupyter && \
     pip install jupyterlab
 
