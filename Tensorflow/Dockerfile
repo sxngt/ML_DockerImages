@@ -1,11 +1,11 @@
-ARG UBUNTU_VERSION=18.04
-ARG CUDA_VERSION=11.4.3
-ARG CUDA=11.4
+ARG UBUNTU_VERSION=22.04
+ARG CUDA_VERSION=12.2.2
+ARG CUDA=12.2
 ARG CUDNN_VERSION=8
 
 FROM nvidia/cuda:${CUDA_VERSION}-cudnn${CUDNN_VERSION}-devel-ubuntu${UBUNTU_VERSION}
 
-LABEL maintainer "http://ysh8614.github.io"
+LABEL maintainer "http://sxngt.github.io"
 
 # 이상한거 안깔거임
 
@@ -61,7 +61,6 @@ RUN apt-get update --fix-missing && \
 
 # Install miniconda3
 # Install miniconda
-# - python에서 ML/DL을 사용할 것이기 때문에 여러모로 편리한 miniconda를 설치합니다.
 # - 환경변수도 함께 지정해줍니다.
 ARG CONDA_DIR=/opt/conda
 ENV CUDA_PATH=/usr/local/cuda
@@ -88,7 +87,7 @@ ENV LANG ko_KR.UTF-8
 RUN apt-get update
 
 # 주피터 쓰자... code-server는 쓰는거 아닙니다 진짜로
-RUN pip install tensorflow-gpu==2.6.0 && \
+RUN pip install tensorflow-gpu==2.15.0 && \
     pip install jupyter && \
     pip install jupyterlab
 
