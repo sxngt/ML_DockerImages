@@ -1,0 +1,14 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo
+    container_name: mits-mongodb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mits
+      - MONGO_INITDB_ROOT_PASSWORD=ehql
+      - MONGO_INITDB_DATABASE=mydb

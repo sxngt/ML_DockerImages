@@ -1,7 +1,7 @@
 version: '3'
 services:
-  ml:
-    image: mits_tf:0.5
+  mits-4090:
+    image: mits-4090:1.0
     ports:
       - "8888:8888"
     runtime: nvidia
