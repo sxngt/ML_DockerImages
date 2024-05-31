@@ -1,6 +1,6 @@
 version: '3'
 services:
-  mits-4090:
+  basedevenv:
     image: base-dev:0.1
     ports:
       - "8888:8888"
