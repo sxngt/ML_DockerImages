@@ -2,6 +2,8 @@ version: '3'
 services:
   basedevenv:
     image: codeserver-cuda:0.1
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     ports:
       - "8888:8888"
     runtime: nvidia
