@@ -73,6 +73,8 @@ RUN curl https://pyenv.run | bash
 RUN pyenv install 3.9.12
 RUN pyenv global 3.9.12
 
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
 
 ENV LANG ko_KR.UTF-8
 RUN apt-get update
